@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Car</title>
+  <style>
+   
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffffff; 
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffffff, #ffffff); 
+    }
+
+    
+    .container {
+      max-width: 700px;
+      width: 100%;
+      margin: 20px;
+      background: #ffffff;
+      padding: 40px 50px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      border: 1px solid #ddd;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff6f00; 
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+    }
+
+  
+    label {
+      display: block;
+      margin-bottom: 12px;
+      color: #333;
+      font-weight: 500;
+      font-size: 18px;
+    }
+
+    
+    input[type="text"],
+    input[type="number"],
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 20px;
+      border: 2px solid #333;
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: #f7f7f7;
+      color: #333;
+    }
+
+   
+    input[type="text"]:read-only {
+      background-color: #f1f1f1;
+      color: #ff6f00; 
+      cursor: not-allowed;
+    }
+
+    button {
+      background-color: #28a745; 
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+
+    button:hover {
+      background-color: #218838; 
+    }
+
+    .total {
+      font-weight: bold;
+      color: #ff6f00; 
+      font-size: 24px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 40px;
+      color: #fff;
+      background-color: #28a745; 
+      padding: 10px 0;
+    }
+
+    .footer a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* responsive styling */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px;
+        max-width: 90%;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      button {
+        font-size: 14px;
+        padding: 12px;
+      }
+
+      .total {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Book Your Car</h1>
+    <form action="book_car.php" method="POST" onsubmit="return calculateTotal()">
+      <input type="hidden" id="user_id" name="user_id" value="1">
+      <input type="hidden" id="car_id" name="car_id">
+      <input type="hidden" id="daily_charge" name="daily_charge">
+
+      <div class="form-group">
+        <label for="car">Car:</label>
+        <input type="text" id="car" readonly>
+      </div>
+
+      <div class="form-group">
+        <label for="rental_days">Number of Rental Days:</label>
+        <input type="number" id="rental_days" name="rental_days" min="1" required>
+      </div>
+
+      <div class="total" id="total_amount_display">Total Amount: KSh 0</div>
+
+      <button type="submit">Confirm Booking</button>
+    </form>
+  </div>
+
+  <div class="footer">
+    <p>Need help? <a href="#">Contact Support</a></p>
+  </div>
+
+  <script>
+    //   from link
+    const urlParams = new URLSearchParams(window.location.search);
+    const carId = urlParams.get('car_id');
+    const model = decodeURIComponent(urlParams.get('model'));
+    const charge = parseFloat(urlParams.get('charge'));
+
+    // Set the value
+    document.getElementById('car_id').value = carId;
+    document.getElementById('daily_charge').value = charge;
+    document.getElementById('car').value = `${model} (KSh ${charge} per day)`;
+
+    // Calculate 
+    function calculateTotal() {
+      const rentalDays = document.getElementById('rental_days').value;
+      const totalAmount = rentalDays * charge;
+
+      document.getElementById('total_amount_display').innerText = `Total Amount: KSh ${totalAmount}`;
+
+      return true;
+    }
+
+    
+    document.getElementById('rental_days').addEventListener('input', calculateTotal);
+  </script>
+</body>
+
+</html>
